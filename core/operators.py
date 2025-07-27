@@ -145,3 +145,4 @@ def rupture_probability_sigmoid(delta, theta, config=None):
     slope = config.get('slope', 10.0)
     risk = delta - theta
     return 1 / (1 + np.exp(-slope * risk))
+
