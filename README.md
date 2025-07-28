@@ -4,7 +4,7 @@
 
 ---
 
-Epacog is a programmable cognition engine designed to model recursive misalignment, projection drift, rupture dynamics, and identity collapse.
+Epacog is a programmable cognition engine designed to model recursive alignment,relavance and reception to recurcive misalignment, projection drift, rupture dynamics, and identity collapse.
 
 Built for epistemic volatility, it enables agents, analysts, and systems to:
 
