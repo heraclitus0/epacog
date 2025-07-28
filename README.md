@@ -4,43 +4,43 @@
 
 ---
 
-**Epacog** is a programmable cognition engine for modeling epistemic drift, rupture, and identity realignment in recursive systems.
+Epacog is a programmable cognition engine designed to model recursive misalignment, projection drift, rupture dynamics, and identity collapse.
 
-Designed as a symbolic lens for cognition, instability, and adaptive control, Epacog enables agents, analysts, or systems to:
+Built for epistemic volatility, it enables agents, analysts, and systems to:
 
-- Model recursive projections (`V`)
-- Accumulate misalignment (`E`)
-- Compute distortion (`∆`)
-- Trigger rupture thresholds (`Θ`)
-- Realign identities via custom ⊙ operators
-- Respond to collapse through user-defined strategies
+- Project belief states over time (`V`)
+- Accumulate misalignment memory (`E`)
+- Quantify distortion between belief and reception (`∆`)
+- Adapt or collapse based on rupture thresholds (`Θ`)
+- Realign via symbolic operators (`⊙`)
+- Simulate recursive drift under external signals
 
-It is not a framework for one logic—it is a sandbox for **building your own epistemic systems**.
+It is not a logic framework. It is an epistemic field engine.
 
 ---
 
-## Key Features
+## Features
 
-- **Modular Epistemic Fields**  
-  Encapsulates drift, projection, misalignment, and recursion
+- **Recursive Epistemic Agents**  
+  Dynamically maintain and evolve `V(t)`, `E(t)`, `∆(t)`, `Θ(t)` fields.
 
-- **Symbolic Operators**  
-  Injection-ready ⊙ realign logic (linear, nonlinear, decay, custom)
+- **Custom Realignment Operators**  
+  Inject your own ⊙ logic—linear, fatigue-aware, nonlinear, or symbolic.
 
-- **Fully Custom Rupture Logic**  
-  Threshold-based, consensus-driven, stochastic, or hybrid
+- **Flexible Rupture Policies**  
+  Threshold-based, probabilistic, consensus-aligned, or hybrid rupture triggers.
 
-- **Collapse Response Modeling**  
-  Reset identity, decay memory, adopt external signals, inject noise
+- **Collapse Response Models**  
+  Control identity collapse: reset, decay, adopt R, or inject noise.
 
-- **Visual Cognitive Traces**  
-  Drift fields, rupture overlays, symbolic collapse annotations
+- **Simulation Engine**  
+  Model epistemic fields over time using symbolic trace logs and visual overlays.
 
-- **Semantic Drift Mapping**  
-  Classifies zones: stable / adaptive / collapsed:*
+- **Symbolic Topology**  
+  Classify field zones: stable, adaptive, collapsed:{type}.
 
-- **Audit-Grade Simulation Engine**  
-  Time-stepped recursive drift, realignment, rupture, and collapse
+- **Composable Architecture**  
+  Override any operator, policy, threshold, or collapse mechanic.
 
 ---
 
@@ -50,8 +50,8 @@ It is not a framework for one logic—it is a sandbox for **building your own ep
 pip install epacog
 ```
 
-Requires:  
-`numpy`, `matplotlib`, `pandas`, `seaborn`
+Dependencies:  
+`numpy`, `matplotlib`, `pandas`, `seaborn` (optional: visualization)
 
 ---
 
@@ -63,85 +63,77 @@ from epacog.operators import realign_linear
 from epacog.rupture.rupture_policy import build_rupture_policy
 from epacog.rupture.volatility import theta_linear_growth
 from epacog.sim.rupture_sim import simulate_epistemic_drift, generate_signal_sequence
-from epacog.sim.projection_drift_map import plot_drift_map, build_drift_field_matrix
+from epacog.sim.projection_drift_map import build_drift_field_matrix, plot_drift_map
 
-# Initialize agent
 agent = EpistemicState(
     V0=0.0,
     E0=0.0,
     realign_fn=realign_linear,
     threshold_fn=theta_linear_growth,
-    rupture_policy=build_rupture_policy(strategy="threshold")
+    rupture_policy=build_rupture_policy("threshold")
 )
 
-# Simulate environment
-signal = generate_signal_sequence(mode="random_walk", steps=200)
-trace = simulate_epistemic_drift(agent, signal, steps=200)
+signal = generate_signal_sequence(mode="shock", steps=100, shock_at=45)
+trace = simulate_epistemic_drift(agent, signal, steps=100)
 
-# Visualize drift
 field = build_drift_field_matrix(trace)
 plot_drift_map(field)
 ```
 
 ---
 
-## Architecture Overview
+## Architecture
 
 | Module | Purpose |
 |--------|---------|
-| `core/epistemic_state.py` | Recursive state engine (`V`, `E`, `∆`, `Θ`, rupture-aware) |
-| `operators.py` | Projection update (`⊙`), memory decay, rupture risk |
-| `rupture/volatility.py` | Threshold dynamics (linear, stochastic, saturating, field-coupled) |
-| `rupture/rupture_policy.py` | Dynamic rupture logic (threshold, stochastic, consensus, hybrid) |
-| `rupture/collapse_models.py` | Collapse responses (reset, decay, adopt reality, inject noise) |
-| `sim/rupture_sim.py` | Recursive drift simulation loop |
-| `sim/projection_drift_map.py` | Visualization + symbolic topology extraction |
+| `core/epistemic_state.py` | Projection state engine (`V`, `E`, `∆`, `Θ`) |
+| `core/operators.py` | Realignment ⊙, distortion ∆, memory decay |
+| `rupture/rupture_policy.py` | Rupture logic: threshold, consensus, stochastic, hybrid |
+| `rupture/volatility.py` | Dynamic Θ(t): linear, saturating, stochastic, peer-coupled |
+| `rupture/collapse_models.py` | Collapse actions: reset, decay, adopt R, symbolic |
+| `sim/rupture_sim.py` | Drift simulation engine with signal injectors |
+| `sim/projection_drift_map.py` | Visual + symbolic field analyzers |
 
 ---
 
-## Use Cases
+## Applications
 
 - Recursive agent modeling
-- Drift-aware control systems
 - LLM hallucination regulation
-- Identity collapse analysis
-- Symbolic cognition experiments
-- Drift-sensitive decision environments
+- Identity collapse simulations
+- Cognitive projection control
+- Drift-aware decision systems
+- Symbolic cognitive field experiments
 - Multi-agent epistemic networks
 
 ---
 
-## Theoretical Basis
+## Foundations
 
-Epacog integrates symbolic constructs and recursive epistemic logic grounded in:
+This engine implements symbolic dynamics derived from recursive epistemic models of:
 
-- **Recursive identity misalignment**
-- **Volatile threshold fields**
-- **Collapse-event classification**
-- **Dynamic projection-reality feedback loops**
+- Misalignment accumulation
+- Rupture activation fields
+- Identity collapse patterns
+- Projection-reality feedback control
 
-It is inspired by—but not limited to—the following formal works:
+Inspired by, but abstracted from:
 
-- _Recursion Control Calculus: A Framework for Epistemic Realignment Under Volatility_  
-  DOI: [10.5281/zenodo.15730197](https://doi.org/10.5281/zenodo.15730197)
+- _Recursion Control Calculus_ ([DOI](https://doi.org/10.5281/zenodo.15730197))  
+- _Continuity Theory_ ([DOI](https://doi.org/10.5281/zenodo.15720763))
 
-- _Continuity Theory: Memory, Distortion, and the Recursive Construction of Reality_  
-  DOI: [10.5281/zenodo.15720763](https://doi.org/10.5281/zenodo.15720763)
-
-All logic is abstracted into symbolic, programmable components. No operator is fixed.  
-Epacog is not a rule system—it is a symbolic engine.
+Epacog encodes these into a sandbox for programmable epistemic control.  
+No component is fixed. Every mechanism is overrideable.
 
 ---
 
 ## License
 
-Apache License 2.0 © Pulikanti Sashi Bharadwaj
+Apache 2.0 © Pulikanti Sashi Bharadwaj
 
 ---
 
 ## Citation
-
-If used in research, please cite:
 
 ```bibtex
 @misc{epacog2025,
