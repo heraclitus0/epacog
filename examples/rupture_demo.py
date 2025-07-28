@@ -1,7 +1,8 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# run_simulation_demo.py
+
 from epacog.core.epistemic_state import EpistemicState
-from epacog.core.realign_fn import realign_tanh
+from epacog.core.operators import realign_tanh
 from epacog.rupture.volatility import theta_saturating
 from epacog.rupture.rupture_policy import build_rupture_policy
 from epacog.rupture.collapse_models import collapse_soft_decay
@@ -22,15 +23,17 @@ from epacog.sim.projection_drift_map import (
 # 1. Configure Epistemic Agent
 # -------------------
 
-rupture_policy = build_rupture_policy(strategy="threshold", theta_fn=theta_saturating)
+rupture_policy = build_rupture_policy(
+    strategy="threshold",
+    theta_fn=theta_saturating
+)
 
 state = EpistemicState(
-    V=0.0,
-    E=0.0,
-    delta_fn=lambda R, V: abs(R - V),
-    threshold_fn=theta_saturating,
+    V0=0.0,
+    E0=0.0,
     realign_fn=realign_tanh,
-    rupture_policy=rupture_policy,
+    threshold_fn=theta_saturating,
+    rupture_policy=rupture_policy
 )
 
 # -------------------
