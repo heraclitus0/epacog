@@ -15,8 +15,6 @@ Built for epistemic volatility, it enables agents, analysts, and systems to:
 - Realign via symbolic operators (`⊙`)
 - Simulate recursive drift under external signals
 
-It is not a logic framework. It is an epistemic field engine.
-
 ---
 
 ## Features
