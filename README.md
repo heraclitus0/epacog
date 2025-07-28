@@ -114,7 +114,7 @@ This engine implements symbolic dynamics derived from recursive epistemic models
 - Identity collapse patterns
 - Projection-reality feedback control
 
-Inspired by, but abstracted from:
+Inspired by:
 
 - _Recursion Control Calculus_ ([DOI](https://doi.org/10.5281/zenodo.15730197))  
 - _Continuity Theory_ ([DOI](https://doi.org/10.5281/zenodo.15720763))
