@@ -22,19 +22,12 @@ Epacog is not a conventional framework—it is a programmable epistemic control 
 2. **Write tests** under `/tests` for any new feature or behavior.
 3. **Submit a pull request** with:
    - A clear description of the epistemic logic being introduced or modified.
-   - Rationale for how it integrates with existing RCC/CT/VC mechanics.
-   - Any new symbolic operators or collapse semantics must be described in `docs/operators.md` or `docs/meta_theorems.md` if applicable.
-
+   - Rationale for how it integrates with existing RCC/CT/VC based mechanics.
 ---
 
-## Review & Ownership
+## License
 
-- Contributions are reviewed based on coherence with the system’s epistemic engine—not popularity or practicality.
-- Merged contributions become part of the evolving Epacog architecture. Attribution is preserved via commit history, but conceptual co-authorship is not implied.
-- Epacog reserves the right to refactor or reinterpret submitted logic for symbolic consistency.
-
----
-
-For any questions, please refer to the project lead or submit an issue tagged with `clarification`.
-
+All code is licensed under [Apache 2.0](./LICENSE). By submitting a pull request, you agree to license your contribution under the same.
 _This is not a general-purpose package. It is a symbolic cognition engine. Design accordingly._
+
+---
