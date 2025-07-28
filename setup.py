@@ -20,11 +20,14 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    install_requires=[
-        'numpy>=1.20',
-        'pandas>=1.3',
-        'matplotlib>=3.4',
-        'seaborn>=0.11'
-    ],
-    python_requires='>=3.8',
+install_requires=[
+    'numpy>=1.20',
+],
+extras_require={
+    "visualization": [
+        "pandas>=1.3",
+        "matplotlib>=3.4",
+        "seaborn>=0.11"
+    ]
+},
 )
