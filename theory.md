@@ -1,10 +1,10 @@
-# 🧠 Epacog: Theoretical Foundations
+# Epacog: Theoretical Foundations
 
 This document outlines the core epistemic theories that underpin the Epacog library. Every operator, rupture mechanism, and simulation behavior in Epacog is grounded in the formal systems introduced in the following research manuscripts authored by Sashi Bharadwaj Pulikanti.
 
 ---
 
-## 📄 1. Recursion Control Calculus (RCC)
+## 1. Recursion Control Calculus (RCC)
 
 **Title:** *Recursion Control Calculus: A Formal Framework for Epistemic Realignment Under Volatility*  
 **DOI:** [10.5281/zenodo.15730197](https://doi.org/10.5281/zenodo.15730197)  
@@ -23,7 +23,7 @@ RCC formalizes how intelligent systems can maintain coherence without becoming b
 
 ---
 
-## 📄 2. Continuity Theory (CT)
+## 2. Continuity Theory (CT)
 
 **Title:** *Continuity Theory: Memory, Distortion, and the Recursive Construction of Reality*  
 **DOI:** [10.5281/zenodo.15720763](https://doi.org/10.5281/zenodo.15720763)  
@@ -42,7 +42,7 @@ CT grounds rupture events in a broader context of symbolic memory formation and 
 
 ---
 
-## 🔁 Integration in Epacog
+## Integration in Epacog
 
 Epacog translates these foundational theories into modular, programmable components:
 
@@ -60,7 +60,7 @@ These mappings ensure that the simulation engine behaves not as a black-box algo
 
 ---
 
-## 🔐 Intellectual Attribution
+## Intellectual Attribution
 
 All theoretical constructs (RCC, CT, VC) are original research contributions by **Sashi Bharadwaj Pulikanti**. These systems form the epistemic engine behind Epacog and are protected by their Zenodo DOIs. Implementations in Epacog are licensed under Apache 2.0 but require proper citation when used in derivative systems, tools, or research.
 
