@@ -1,3 +1,8 @@
+# Copyright 2025 Pulikanti Sashi Bharadwaj
+# Licensed under the Apache License, Version 2.0
+# https://www.apache.org/licenses/LICENSE-2.0
+
+
 # epistemic_state.py
 from numpy import random as np
 
