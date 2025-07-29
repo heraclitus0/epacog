@@ -1,8 +1,3 @@
-from setuptools import setup, find_packages
-
-with open("README.md", encoding="utf-8") as f:
-    long_description = f.read()
-
 setup(
     name='epacog',
     version='0.1.0',
@@ -23,8 +18,13 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
+    keywords='epistemic control, rupture detection, symbolic cognition, recursive modeling, RCC, CT, AI',
+    project_urls={
+        "Documentation": "https://github.com/heraclitus0/epacog",
+        "Source": "https://github.com/heraclitus0/epacog",
+    },
     install_requires=[
-        'numpy>=1.20',
+        'numpy>=1.20,<2.0',
     ],
     extras_require={
         "visualization": [
