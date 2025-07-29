@@ -1,5 +1,5 @@
 # epistemic_state.py
-from numpy import random as np
+import numpy as np
 
 class EpistemicState:
     """
