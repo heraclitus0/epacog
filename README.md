@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="epacog-logo" alt="Cognize Logo" width="200"/>
+  <img src="epacog-logo" alt="Epacog Logo" width="200"/>
 </p>
 
 # Epacog
