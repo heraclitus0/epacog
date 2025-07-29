@@ -162,6 +162,164 @@ def symbolize_drift_regions(field, margin=0.05):
     return zones
 from collections import Counter
 
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from collections import Counter
+
+def build_drift_field_matrix(trace, include_collapse=True):
+    """
+    Converts a simulation trace into aligned NumPy arrays for visualization.
+
+    Parameters:
+    - trace: List of state dictionaries (from simulate_epistemic_drift)
+    - include_collapse: If True, include symbolic collapse markers
+
+    Returns:
+    - field: dict with aligned arrays:
+        - 't': time steps
+        - 'V': projection
+        - 'R': received
+        - '∆': distortion
+        - 'Θ': threshold
+        - 'ruptured': rupture flag (bool)
+        - 'collapse_type': (optional) list of strings or None
+    """
+    field = {
+        't': [],
+        'V': [],
+        'R': [],
+        '∆': [],
+        'Θ': [],
+        'ruptured': [],
+    }
+
+    if include_collapse:
+        field['collapse_type'] = []
+
+    for step in trace:
+        field['t'].append(step.get('t', 0))
+        field['V'].append(step.get('V', 0.0))
+        field['R'].append(step.get('R', 0.0))
+        field['∆'].append(step.get('∆', 0.0))
+        field['Θ'].append(step.get('Θ', 0.0))
+        field['ruptured'].append(step.get('ruptured', False))
+        if include_collapse:
+            field['collapse_type'].append(step.get('collapse_type', None))
+
+    # Convert to arrays for indexing/plotting
+    for key in field:
+        if key != 'collapse_type':
+            field[key] = np.array(field[key])
+
+    return field
+
+def plot_drift_map(field, figsize=(12, 6), show_collapse=True):
+    """
+    Plots the epistemic drift field over time.
+
+    Parameters:
+    - field: Output from build_drift_field_matrix()
+    - figsize: Tuple of plot dimensions
+    - show_collapse: If True, annotate symbolic collapse types
+    """
+    t = field['t']
+    V = field['V']
+    R = field['R']
+    Delta = field['∆']
+    Theta = field['Θ']
+    ruptured = field['ruptured']
+    collapse_type = field.get('collapse_type', None)
+
+    plt.figure(figsize=figsize)
+
+    plt.plot(t, V, label='V(t): Projection', linewidth=2)
+    plt.plot(t, R, label='R(t): Reality', linestyle='--')
+    plt.plot(t, Delta, label='∆(t): Distortion', linestyle='-.')
+    plt.plot(t, Theta, label='Θ(t): Threshold', linestyle=':')
+
+    if ruptured.any():
+        rupture_t = t[ruptured]
+        rupture_V = V[ruptured]
+        plt.scatter(rupture_t, rupture_V, color='red', label='Rupture', zorder=5)
+
+        if show_collapse and collapse_type:
+            for idx in np.where(ruptured)[0]:
+                ctype = collapse_type[idx]
+                if ctype:
+                    plt.annotate(ctype, (t[idx], V[idx]), textcoords="offset points", xytext=(0, 10),
+                                 ha='center', fontsize=8)
+
+    plt.xlabel("Time (t)")
+    plt.ylabel("Projection / Distortion")
+    plt.title("Epistemic Drift Field")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def plot_rupture_overlay(field, figsize=(12, 2), collapse_palette=None):
+    """
+    Overlays a rupture frequency or collapse-type heatmap along the timeline.
+
+    Parameters:
+    - field: Drift field from build_drift_field_matrix()
+    - figsize: Plot size
+    - collapse_palette: Optional dict mapping collapse types to colors
+    """
+    t = field['t']
+    ruptured = field['ruptured']
+    collapse_type = field.get('collapse_type', None)
+
+    plt.figure(figsize=figsize)
+
+    if collapse_type and collapse_palette:
+        collapse_colors = [
+            collapse_palette.get(ct, '#cccccc') if ct else '#ffffff'
+            for ct in collapse_type
+        ]
+        bar_colors = [
+            collapse_colors[i] if ruptured[i] else '#ffffff'
+            for i in range(len(t))
+        ]
+    else:
+        bar_colors = ['#ff4444' if r else '#ffffff' for r in ruptured]
+
+    plt.bar(t, [1] * len(t), color=bar_colors, edgecolor='none')
+    plt.title("Rupture / Collapse Overlay")
+    plt.yticks([])
+    plt.xlabel("Time (t)")
+    plt.tight_layout()
+    plt.show()
+
+def symbolize_drift_regions(field, margin=0.05):
+    """
+    Classifies each timestep into epistemic zones.
+
+    Parameters:
+    - field: Drift field from build_drift_field_matrix()
+    - margin: Threshold margin to define 'adaptive' state
+
+    Returns:
+    - List of symbolic zone labels (len = timesteps)
+    """
+    zones = []
+    delta = field['∆']
+    theta = field['Θ']
+    ruptured = field['ruptured']
+    collapse_types = field.get('collapse_type', None)
+
+    for i in range(len(delta)):
+        if ruptured[i]:
+            collapse = collapse_types[i] if collapse_types else None
+            zones.append(f"collapsed:{collapse}" if collapse else "ruptured")
+        elif delta[i] > (theta[i] - margin):
+            zones.append("adaptive")
+        else:
+            zones.append("stable")
+
+    return zones
+
 def describe_field_topology(field, zones=None):
     """
     Provides symbolic summary of the epistemic field structure.
