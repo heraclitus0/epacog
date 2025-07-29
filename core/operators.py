@@ -2,11 +2,11 @@
 Epistemic Operators — RCC / CT / VC primitives
 
 Contains:
-- ∆(t) distortion operator
-- ⊙(t) realignment operators
-- Rupture risk, probability mapping
-- E(t) memory decay
-- Symbolic ⊙ variant registry
+- ∆(t): Distortion operator
+- ⊙(t): Realignment operators (linear, nonlinear, decay)
+- E(t): Misalignment memory decay
+- Rupture risk & rupture probability mapping
+- Symbolic ⊙ registry for audit and DSL-ready introspection
 """
 
 import numpy as np
@@ -17,15 +17,16 @@ import numpy as np
 
 def delta(V, R):
     """
-    RCC ∆(t) operator.
-    Computes epistemic distortion between projected memory V(t) and received signal R(t).
-    
+    RCC ∆(t) operator: computes epistemic distortion.
+
+    ∆ = |R - V|
+
     Parameters:
-    - V: Projected memory
-    - R: Received signal
-    
+    - V (float): Projected field
+    - R (float): Received signal
+
     Returns:
-    - ∆(t): absolute misalignment
+    - float: distortion
     """
     return abs(R - V)
 
@@ -35,10 +36,9 @@ def delta(V, R):
 
 def realign_linear(V, R, delta, E, t, config=None):
     """
-    RCC ⊙ operator (linear).
+    RCC ⊙ operator: Linear realignment.
 
-    Formula:
-        V′ = V + k · ∆ · (1 + E)
+    V′ = V + k · ∆ · (1 + E)
     """
     config = config or {}
     k = config.get('k', 0.3)
@@ -46,103 +46,95 @@ def realign_linear(V, R, delta, E, t, config=None):
 
 def realign_tanh(V, R, delta, E, t, config=None):
     """
-    RCC ⊙ operator (nonlinear, smooth convergence).
+    RCC ⊙ operator: Smooth convergence under high distortion.
 
-    Formula:
-        V′ = V + k * tanh(∆) / (1 + E)
+    V′ = V + k · tanh(∆) / (1 + E)
     """
     config = config or {}
     k = config.get('k', 0.3)
-    adjustment = k * np.tanh(delta) / (1 + E)
-    return V + adjustment
+    return V + k * np.tanh(delta) / (1 + E)
 
 def realign_decay(V, R, delta, E, t, config=None):
     """
-    RCC ⊙ operator (fatigue-sensitive).
+    RCC ⊙ operator: Fatigue-aware realignment.
 
-    Formula:
-        k(E) = k₀ / (1 + d·E)
-        V′ = V + k(E) · ∆
+    k(E) = k₀ / (1 + d · E)
+    V′ = V + k(E) · ∆
     """
     config = config or {}
     k0 = config.get('k0', 0.3)
     d = config.get('d', 0.5)
-
     adaptive_k = k0 / (1 + d * E)
     return V + adaptive_k * delta
 
 def realign_custom_template(V, R, delta, E, t, config=None):
     """
-    User-defined realignment logic (⊙ template).
-    
-    To be implemented externally.
+    Template ⊙ operator for custom logic injection.
     """
-    raise NotImplementedError("Define your custom ⊙ logic here.")
+    raise NotImplementedError("Define your custom ⊙ operator externally.")
 
 def describe_realign_variants():
     """
-    Returns symbolic map of ⊙ operator variants.
-    
-    Format:
-        key → {
-            "description": logic summary,
-            "meaning": epistemic interpretation
-        }
+    Returns symbolic map of ⊙ operator variants for UI/DSL purposes.
     """
     return {
         "linear": {
             "description": "V′ = V + k · ∆ · (1 + E)",
-            "meaning": "Classical RCC — realignment scales with drift and memory."
+            "meaning": "Classical RCC — adapts realignment with drift and memory."
         },
         "tanh": {
             "description": "V′ = V + k · tanh(∆) / (1 + E)",
-            "meaning": "Smooth convergence — suppresses overreaction under high drift."
+            "meaning": "Smooth damping — caps response under extreme distortion."
         },
         "decay": {
             "description": "V′ = V + [k₀ / (1 + d·E)] · ∆",
-            "meaning": "Fatigue-aware — misalignment memory reduces flexibility."
+            "meaning": "Fatigue-aware — memory suppresses agility."
         },
         "custom": {
             "description": "User-defined ⊙ logic",
-            "meaning": "Design your own projection update logic."
+            "meaning": "Inject bespoke projection update logic."
         }
     }
 
 # ------------------------------
-# E(t) Memory Dynamics
+# E(t): Misalignment Memory Dynamics
 # ------------------------------
 
 def E_decay(E, t, config=None):
     """
-    Applies homeostatic decay to misalignment memory E(t).
-    
-    Formula:
-        E′ = E * decay_rate
+    Applies decay to misalignment memory.
+
+    E′ = E · decay_rate
     """
     config = config or {}
     decay_rate = config.get('decay_rate', 0.95)
     return E * decay_rate
 
 # ------------------------------
-# Rupture Pressure and Probability
+# Rupture Risk & Rupture Probability
 # ------------------------------
 
 def compute_risk(delta, theta):
     """
-    Computes rupture pressure as:
-        risk = ∆ - Θ
+    Computes rupture pressure as: risk = ∆ - Θ
     """
     return delta - theta
 
 def rupture_probability_sigmoid(delta, theta, config=None):
     """
-    Computes rupture probability using sigmoid(risk).
+    Computes rupture probability using sigmoid transformation.
 
-    Formula:
-        P = 1 / (1 + exp(-slope · (∆ - Θ)))
+    P = 1 / (1 + exp(-slope · (∆ - Θ)))
+
+    Parameters:
+    - delta: ∆(t) distortion
+    - theta: Θ(t) threshold
+    - config: optional dict with 'slope'
+
+    Returns:
+    - float: rupture probability ∈ (0, 1)
     """
     config = config or {}
     slope = config.get('slope', 10.0)
     risk = delta - theta
     return 1 / (1 + np.exp(-slope * risk))
-
