@@ -6,7 +6,7 @@ include theory.md
 recursive-include examples *.py
 recursive-include core *.py
 recursive-include rupture *.py
-recursive-include rupture/sim *.py
 recursive-include sim *.py
+recursive-include docs *.md
 
 global-exclude __pycache__ *.py[cod] *.DS_Store
