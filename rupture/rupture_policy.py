@@ -1,19 +1,29 @@
+"""
+Rupture Policy — RCC / CT / VC Rupture Trigger Logic
+
+Implements symbolic rupture decision strategies:
+- RCC default threshold rupture
+- CT consensus-based rupture fields
+- VC probabilistic rupture via risk sigmoid
+- User-defined hybrid rupture logic
+
+Supports: projection-pressure rupture, symbolic field consensus, adaptive volatility
+"""
+
 import numpy as np
+
+# -----------------------------
+# 1. RCC Default Rupture Logic
+# -----------------------------
 
 def rupture_policy_default(V, R, delta, E, t, config=None):
     """
-    Default rupture policy: RCC Axiom 3.
+    RCC-style rupture: triggers rupture if ∆(t) > Θ(t)
 
-    Triggers rupture if:
-        ∆(t) > Θ(t)
-
-    Parameters:
-    - V: Projection
-    - R: Received signal
-    - delta: Distortion ∆
-    - E: Misalignment memory
-    - t: Recursion step
-    - config: Includes theta0, a, sigma
+    Config:
+    - theta0: base resistance
+    - a: E(t) sensitivity
+    - sigma_theta: noise volatility
 
     Returns:
     - True if rupture should occur
@@ -25,23 +35,27 @@ def rupture_policy_default(V, R, delta, E, t, config=None):
 
     theta = theta0 + a * E + np.random.normal(0, sigma)
     return delta > theta
-import numpy as np
+
+
+# -----------------------------
+# 2. Dynamic Rupture Strategy Builder
+# -----------------------------
 
 def build_rupture_policy(strategy="threshold", **kwargs):
     """
-    Constructs a dynamic rupture policy function.
+    Constructs a rupture policy function aligned with symbolic or probabilistic logic.
 
     Supported strategies:
-    - 'threshold' : ∆ > Θ(t)
-    - 'consensus' : ∆ > mean(Θ(peer agents))
-    - 'stochastic': Rupture with P = sigmoid(∆ - Θ)
-    - 'hybrid'    : User-supplied rupture function
+    - 'threshold' : RCC-style ∆ > Θ(t)
+    - 'consensus' : CT-style ∆ > mean(Θ(peer agents))
+    - 'stochastic': VC-style probabilistic rupture (sigmoid)
+    - 'hybrid'    : user-defined rupture function
 
-    Keyword Args (kwargs):
-    - theta_fn: callable(delta, E, config) → Θ(t)
-    - peer_states: list of EpistemicState instances (for consensus)
-    - probability_fn: callable(...) → rupture probability
-    - hybrid_fn: custom callable rupture logic (overrides all)
+    Keyword Args:
+    - theta_fn: function(delta, E, config) → Θ(t)
+    - peer_states: list of EpistemicState objects (for consensus)
+    - probability_fn: callable returning P(rupture)
+    - hybrid_fn: custom rupture logic (V, R, delta, E, t, config)
 
     Returns:
     - rupture_fn(V, R, delta, E, t, config)
@@ -74,8 +88,11 @@ def build_rupture_policy(strategy="threshold", **kwargs):
 
         elif strategy == "stochastic":
             risk = delta - theta_fn(delta, E, config)
-            prob = 1 / (1 + np.exp(-risk * config.get("slope", 10.0))) if not probability_fn else \
-                probability_fn(V, R, delta, E, t, config)
+            if probability_fn:
+                prob = probability_fn(V, R, delta, E, t, config)
+            else:
+                slope = config.get("slope", 10.0)
+                prob = 1 / (1 + np.exp(-risk * slope))
             return np.random.rand() < prob
 
         elif strategy == "hybrid" and hybrid_fn:
@@ -84,38 +101,49 @@ def build_rupture_policy(strategy="threshold", **kwargs):
         return False
 
     return rupture
+
+
+# -----------------------------
+# 3. Strategy Registry
+# -----------------------------
+
 def describe_builtin_strategies():
     """
-    Returns a dictionary of suggested rupture policy templates.
-    
-    This is not a closed strategy list. Agents or users may define
-    their own rupture logic using any symbolic, probabilistic,
-    consensus-based, or dynamic method.
+    Returns symbolic rupture policy variants.
 
-    These entries are suggestive patterns, not enforced structures.
+    Format:
+        key → {
+            "description": logic rule,
+            "meaning": epistemic interpretation
+        }
     """
     return {
         "threshold": {
             "description": "∆ > Θ(t)",
-            "meaning": "Rupture occurs when epistemic distortion exceeds individual adaptive tolerance."
+            "meaning": "Rupture occurs when epistemic distortion exceeds internal tolerance."
         },
         "consensus": {
             "description": "∆ > mean(Θ(peer agents))",
-            "meaning": "Rupture occurs when individual distortion exceeds average rupture threshold of peers."
+            "meaning": "Rupture occurs when personal distortion exceeds peer consensus field."
         },
         "stochastic": {
             "description": "P(rupture) = sigmoid(∆ - Θ)",
-            "meaning": "Probabilistic rupture based on epistemic risk field pressure."
+            "meaning": "Volational rupture based on epistemic pressure probability."
         },
         "hybrid": {
             "description": "User-defined callable",
-            "meaning": "User composes or injects any rupture logic—deterministic, contextual, or symbolic."
+            "meaning": "Custom rupture logic, symbolic or contextual."
         }
     }
+
+
+# -----------------------------
+# 4. Strategic Warning
+# -----------------------------
+
 def rupture_policy_freedom_notice():
     return (
-        "Epacog rupture policies are fully open-ended. "
-        "You are encouraged to create rupture strategies that fit your agent's epistemic model, "
-        "projection environment, or symbolic logic system. Use `build_rupture_policy(...)` "
-        "to inject your own rupture conditions."
+        "Epacog rupture policies are fully programmable. "
+        "You are encouraged to construct rupture strategies aligned with your agent's symbolic logic, "
+        "projection model, or epistemic dynamics. Use `build_rupture_policy(...)` to define rupture conditions."
     )
