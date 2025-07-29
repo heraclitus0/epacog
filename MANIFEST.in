@@ -1,12 +1,10 @@
-include README.md
 include LICENSE
-include USER_GUIDE.md
-include theory.md
+include README.md
+include pyproject.toml
+include setup.py
+include MANIFEST.in
+recursive-exclude tests *
+recursive-exclude examples *
 
-recursive-include examples *.py
-recursive-include core *.py
-recursive-include rupture *.py
-recursive-include sim *.py
-recursive-include docs *.md
 
 global-exclude __pycache__ *.py[cod] *.DS_Store
