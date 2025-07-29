@@ -1,3 +1,11 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ------------------------------------
+# 1. Epistemic Drift Simulation Engine
+# ------------------------------------
+
 def simulate_epistemic_drift(
     initial_state,
     signal_sequence,
@@ -32,7 +40,6 @@ def simulate_epistemic_drift(
         snapshot['R'] = R
         snapshot['t'] = t
 
-        # Handle rupture post-processing
         if snapshot['ruptured'] and collapse_fn:
             collapsed = collapse_fn(
                 state.V,
@@ -55,7 +62,11 @@ def simulate_epistemic_drift(
         trace.append(snapshot)
 
     return trace
-import numpy as np
+
+
+# ------------------------------------
+# 2. Signal Stream Generator
+# ------------------------------------
 
 def generate_signal_sequence(
     mode="random_walk",
@@ -79,7 +90,6 @@ def generate_signal_sequence(
     if seed is not None:
         np.random.seed(seed)
 
-    mode = mode.lower()
     R = kwargs.get('start', 0.0)
     freq = kwargs.get('freq', 0.1)
     noise = kwargs.get('noise', 0.05)
@@ -94,19 +104,19 @@ def generate_signal_sequence(
         elif mode == "oscillate":
             R = np.sin(t * freq)
         elif mode == "shock":
-            if t == shock_at:
-                R += shock_magnitude
-            else:
-                R += np.random.normal(0, noise)
+            R += shock_magnitude if t == shock_at else np.random.normal(0, noise)
         elif mode == "constant":
             R = const_value
         elif mode == "custom" and callable(custom_fn):
             R = custom_fn(t)
         else:
             raise ValueError(f"Unsupported signal mode: {mode}")
-
         yield R
-import pandas as pd
+
+
+# ------------------------------------
+# 3. Simulation Logger
+# ------------------------------------
 
 def log_simulation_trace(trace, to_df=True, save_path=None):
     """
@@ -132,14 +142,8 @@ def log_simulation_trace(trace, to_df=True, save_path=None):
     }
 
     for step in trace:
-        structured['t'].append(step.get('t'))
-        structured['R'].append(step.get('R'))
-        structured['V'].append(step.get('V'))
-        structured['E'].append(step.get('E'))
-        structured['∆'].append(step.get('∆'))
-        structured['Θ'].append(step.get('Θ'))
-        structured['ruptured'].append(step.get('ruptured'))
-        structured['collapse_type'].append(step.get('collapse_type', None))
+        for key in structured:
+            structured[key].append(step.get(key, None))
 
     if to_df:
         df = pd.DataFrame(structured)
@@ -148,7 +152,11 @@ def log_simulation_trace(trace, to_df=True, save_path=None):
         return df
 
     return structured
-import matplotlib.pyplot as plt
+
+
+# ------------------------------------
+# 4. Simulation Plot
+# ------------------------------------
 
 def plot_simulation(trace_df, figsize=(12, 6), annotate_collapses=True):
     """
@@ -183,6 +191,12 @@ def plot_simulation(trace_df, figsize=(12, 6), annotate_collapses=True):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+
+# ------------------------------------
+# 5. Symbolic Simulation Descriptor
+# ------------------------------------
+
 def describe_simulation_config(epistemic_state, signal_config=None, rupture_strategy=None, collapse_model=None):
     """
     Returns a dictionary summarizing key components of a simulation setup.
