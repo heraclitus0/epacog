@@ -147,9 +147,10 @@ Apache 2.0 © Pulikanti Sashi Bharadwaj
 
 ```bibtex
 @misc{epacog2025,
-  author       = {Sashi Bharadwaj Pulikanti},
-  title        = {Epacog: A Symbolic Cognition Engine for Drift, Rupture, and Recursive Realignment},
+  author       = {Pulikanti, Sashi Bharadwaj},
+  title        = {Epacog: Epistemic Artificial Cognition},
   howpublished = {\url{https://github.com/heraclitus0/epacog}},
-  year         = {2025}
+  year         = {2025},
+  note         = {Version-agnostic repository citation}
 }
 ```
