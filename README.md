@@ -2,14 +2,18 @@
   <img src="e-logo.png" alt="Epacog Logo" width="200"/>
 </p>
 
-# Epacog
+<h1 align="center">Epacog</h1>
 
-**Epistemic Artificial Cognition**
+<p align="center"><em>Epistemic Artificial Cognition</em></p>
+
 ---
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue)
-![Python](https://img.shields.io/badge/python-3.8+-blue)
-![Status](https://img.shields.io/badge/status-beta-orange)
+<p align="center">
+  <img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License"/>
+  <img src="https://img.shields.io/badge/python-3.8+-blue" alt="Python"/>
+  <img src="https://img.shields.io/badge/status-beta-orange" alt="Status"/>
+</p>
+
 
 ---
 
