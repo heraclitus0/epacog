@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use Epacog, please cite it using the metadata below."
+title: "Epacog: Epistemic Artificial Cognition"
+authors:
+  - family-names: "Pulikanti"
+    given-names: "Sashi Bharadwaj"
+repository-code: "https://github.com/heraclitus0/epacog"
+license: "Apache-2.0"
+abstract: >
+  Epacog is a programmable framework for epistemic cognition,
+  modeling drift, rupture, recursive alignment, and collapse dynamics in volatile systems.
